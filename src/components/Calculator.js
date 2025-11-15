@@ -1,71 +1,138 @@
 import { useState } from 'react';
 
 function Calculator() {
-    const [number1, setNumber1] = useState('');
-    const [number2, setNumber2] = useState('');
-    const [result, setResult] = useState(null);
+    const [firstValue, setFirstValue] = useState('');
+    const [secondValue, setSecondValue] = useState('');
+    const [output, setOutput] = useState('');
+    const [memory, setMemory] = useState(0);
 
     const handleAddition = () => {
-        const sum = Number(number1) + Number(number2);
-        setResult({operation: 'Addition', value: sum});
-    }
+        const sum = Number(firstValue) + Number(secondValue);
+        setOutput(sum);
+    };
 
     const handleSubtraction = () => {
-        const difference = Number(number1) - Number(number2);
-        setResult({operation: 'Subtraction', value: difference});
-    }
+        const difference = Number(firstValue) - Number(secondValue);
+        setOutput(difference);
+    };
 
     const handleMultiplication = () => {
-        const product = Number(number1) * Number(number2);
-        setResult({operation: 'Multiplication', value: product});
-    }
+        const product = Number(firstValue) * Number(secondValue);
+        setOutput(product);
+    };
 
     const handleDivision = () => {
-        if (Number(number2) === 0) {
-            setResult({operation: 'Division', value: 'Cannot divide by zero'});
+        if (Number(secondValue) === 0) {
+            setOutput('Error: Division by zero');
         } else {
-            const quotient = Number(number1) / Number(number2);
-            setResult({operation: 'Division', value: quotient});
+            const quotient = Number(firstValue) / Number(secondValue);
+            setOutput(quotient);
         }
     };
 
     const handleExponentiation = () => {
-        const power = Math.pow(Number(number1), Number(number2));
-        setResult({operation: 'Exponentiation', value: power});
+        const power = Math.pow(Number(firstValue), Number(secondValue));
+        setOutput(power);
     };
 
-    const handleModulus = () => {
-        const modulus = Number(number1) % Number(number2);
-        setResult({operation: 'Modulus', value: modulus});
+    const handleClear = () => {
+        setFirstValue('');
+        setSecondValue('');
+        setOutput('');
+    };
+
+    const handleEquals = () => {
+        // The equals button can show the current output
+        // or you could implement last operation repeat
+        if (output !== '') {
+            alert(`Result: ${output}`);
+        }
+    };
+
+    const handleMemoryRecall = () => {
+        // Load memory value into first value field
+        setFirstValue(memory);
+    };
+
+    const handleMemoryStore = () => {
+        // Store current output to memory
+        if (output !== '') {
+            setMemory(Number(output));
+        }
     };
 
     return (
-        <div>
+       <center><div style={{ border: '1px solid black', padding: '20px', width: '300px', textAlign: 'inherit' }}>
             <h2>Calculator</h2>
             
             <div>
-            <label>First value <input type="number" value={number1} onChange={(e) => setNumber1(e.target.value)} /></label>
+                <label>
+                    First Value: 
+                    <input 
+                        type="number" 
+                        value={firstValue} 
+                        onChange={(e) => setFirstValue(e.target.value)} 
+                    />
+                </label>
             </div>
             
+            <br />
+            
             <div>
-            <label>Second value <input type="number" value={number2} onChange={(e) => setNumber2(e.target.value)} /></label>
+                <label>
+                    Second Value: 
+                    <input 
+                        type="number" 
+                        value={secondValue} 
+                        onChange={(e) => setSecondValue(e.target.value)} 
+                    />
+                </label>
             </div>
+
+            <br />
+
+            <div>
+                <label>
+                    Output: 
+                    <input 
+                        type="text" 
+                        value={output} 
+                        readOnly 
+                    />
+                </label>
+            </div>
+
+            <br />
 
             <div>
                 <button onClick={handleAddition}>+</button>
-                <button onClick={handleSubtraction}>-</button>
-                <button onClick={handleMultiplication}>*</button>
-                <button onClick={handleDivision}>/</button>
-                <button onClick={handleExponentiation}>^</button>
-                <button onClick={handleModulus}>M</button>
+                <button onClick={handleMultiplication}>×</button>
+                <button onClick={handleDivision}>÷</button>
             </div>
-            
-            {result && (
-                <div>
-                    <h3>Result of {result.operation}: {result.value}</h3>
-                </div>
-            )}
+
+            <br />
+
+            <div>
+                <button onClick={handleSubtraction}>-</button>
+                <button onClick={handleExponentiation}>^</button>
+                <button onClick={handleMemoryRecall}>M</button>
+            </div>
+
+            <br />
+
+            <div>
+                <button onClick={handleClear}>C</button>
+                <button onClick={handleEquals}>=</button>
+                <button onClick={handleMemoryStore}>MS</button>
+            </div>
+
+            <br />
+
+            <div>
+                <small>Memory: {memory}</small>
+            </div>
         </div>
+        </center>
     );
 }
 
